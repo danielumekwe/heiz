@@ -8,6 +8,7 @@ import {
 } from "@/lib/enquiry";
 import { defaultLocale, hasLocale } from "@/i18n/config";
 import { translatorFor } from "@/i18n/dictionaries";
+import { isMailConfigured, sendEnquiryEmail } from "@/lib/mailer";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -31,10 +32,10 @@ function read(formData: FormData, key: string) {
 /**
  * Handles the enquiry form.
  *
- * Enquiries are forwarded as JSON to ENQUIRY_WEBHOOK_URL (a server-only
- * environment variable). Until that is configured the action reports that
- * online enquiries are unavailable; it never reports a success it cannot
- * confirm.
+ * Enquiries are emailed to the business mailbox over SMTP (see
+ * src/lib/mailer.ts) and, if ENQUIRY_WEBHOOK_URL is set, also forwarded as
+ * JSON. Until one of the two is configured the action reports that online
+ * enquiries are unavailable; it never reports a success it cannot confirm.
  */
 export async function submitEnquiry(
   _previous: EnquiryState,
@@ -87,8 +88,9 @@ export async function submitEnquiry(
   }
 
   const endpoint = process.env.ENQUIRY_WEBHOOK_URL;
+  const mailConfigured = isMailConfigured();
 
-  if (!endpoint) {
+  if (!mailConfigured && !endpoint) {
     return {
       status: "unavailable",
       message:
@@ -98,15 +100,21 @@ export async function submitEnquiry(
   }
 
   try {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ source: "1heiz-website", language: locale, ...values }),
-      signal: AbortSignal.timeout(10_000),
-      cache: "no-store",
-    });
+    // Email to the business mailbox is the primary route.
+    if (mailConfigured) await sendEnquiryEmail(values, locale);
 
-    if (!response.ok) throw new Error(`Enquiry endpoint returned ${response.status}`);
+    // Optional: also forward the enquiry as JSON, for example to a CRM.
+    if (endpoint) {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ source: "1heiz-website", language: locale, ...values }),
+        signal: AbortSignal.timeout(10_000),
+        cache: "no-store",
+      });
+
+      if (!response.ok) throw new Error(`Enquiry endpoint returned ${response.status}`);
+    }
   } catch (error) {
     console.error("Enquiry submission failed", error);
     return {

@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Cache Components and Partial Prefetching are left off: they hang in the
+  // Cloudflare Workers runtime this site is deployed to. Every page is still
+  // prerendered at build time through generateStaticParams.
   turbopack: {
     rules: {
       "*.css": {

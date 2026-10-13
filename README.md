@@ -18,7 +18,30 @@ npm run i18n:extract   # list text that still needs translating
 Copy `.env.example` to `.env.local` and set:
 
 - `NEXT_PUBLIC_SITE_URL` – the public URL, used for canonical links, the sitemap and social metadata. Defaults to `https://1heizwoodpellets.com`.
-- `ENQUIRY_WEBHOOK_URL` – server-only endpoint that receives enquiry form submissions as JSON. Until it is set, the form tells visitors their message was not sent.
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` – server-only mail server settings. The enquiry form emails each submission to `ENQUIRY_TO` (default `info@1heizwoodpellets.com`), with the customer as Reply-To. Until `SMTP_HOST` is set, the form tells visitors their message was not sent.
+- `ENQUIRY_WEBHOOK_URL` – optional server-only endpoint that also receives each enquiry as JSON.
+
+## Deploying to Cloudflare
+
+The site runs on Cloudflare Workers through the OpenNext adapter (`wrangler.jsonc`, `open-next.config.ts`).
+
+```bash
+npm run cf:preview   # build and run in the Cloudflare runtime locally (http://localhost:8787)
+npm run cf:deploy    # build and deploy from this computer (asks you to log in to Cloudflare)
+```
+
+To deploy from GitHub instead, create a Worker in the Cloudflare dashboard, connect this repository, and set:
+
+- Build command: `npx opennextjs-cloudflare build`
+- Deploy command: `npx wrangler deploy`
+
+Then add the mail settings under the Worker's Settings → Variables and Secrets: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER` as variables and `SMTP_PASS` as a secret. For the local preview, put the same names in `.dev.vars`.
+
+Notes:
+
+- `cacheComponents` is off in `next.config.ts` because it hangs in the Workers runtime.
+- `scripts/patch-opennext.mjs` runs after `npm install` and fixes an adapter incompatibility with Next.js 16.4. Remove it once the adapter supports `preview-props.json`.
+- Images are served at their stored size on Cloudflare unless Cloudflare Images is enabled; the files in `public/images` are already web-sized.
 
 ## Languages
 
