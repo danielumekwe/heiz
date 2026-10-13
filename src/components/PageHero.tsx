@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
 import type { ImageKey } from "@/data/images";
+import { getT } from "@/i18n/server";
 import { Photo } from "./Photo";
 
 /** Intro block for inner pages: copy on the left, a tall photograph on the right. */
-export function PageHero({
+export async function PageHero({
   eyebrow,
   title,
   intro,
@@ -16,15 +17,17 @@ export function PageHero({
   image: ImageKey;
   children?: ReactNode;
 }) {
+  const t = await getT();
+
   return (
     <section className="border-b border-sand/70 bg-cream">
       <div className="site-container grid items-center gap-10 py-14 lg:grid-cols-[1fr_1.05fr] lg:gap-16 lg:py-20">
         <div>
-          <p className="eyebrow">{eyebrow}</p>
+          <p className="eyebrow">{t(eyebrow)}</p>
           <h1 className="mt-4 text-[2.4rem] font-semibold sm:text-5xl lg:text-[3.5rem]">
-            {title}
+            {t(title)}
           </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted">{intro}</p>
+          <p className="mt-6 max-w-xl text-lg text-muted">{t(intro)}</p>
           {children ? (
             <div className="mt-8 flex flex-wrap gap-3">{children}</div>
           ) : null}

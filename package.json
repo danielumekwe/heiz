@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "i18n:extract": "node scripts/i18n-extract.mjs"
   },
   "dependencies": {
     "next": "16.4.0",

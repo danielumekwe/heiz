@@ -6,6 +6,8 @@ import {
   type EnquiryState,
   type EnquiryValues,
 } from "@/lib/enquiry";
+import { defaultLocale, hasLocale } from "@/i18n/config";
+import { translatorFor } from "@/i18n/dictionaries";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -38,6 +40,11 @@ export async function submitEnquiry(
   _previous: EnquiryState,
   formData: FormData,
 ): Promise<EnquiryState> {
+  // The form posts its page language so messages come back in that language.
+  const requested = formData.get("lang");
+  const locale = typeof requested === "string" && hasLocale(requested) ? requested : defaultLocale;
+  const t = translatorFor(locale);
+
   const values = Object.fromEntries(
     (Object.keys(limits) as (keyof EnquiryValues)[]).map((key) => [
       key,
@@ -47,33 +54,33 @@ export async function submitEnquiry(
 
   // Honeypot: real visitors never see or fill this field.
   if (read(formData, "website")) {
-    return { status: "failed", message: "Your enquiry could not be sent.", values };
+    return { status: "failed", message: t("Your enquiry could not be sent."), values };
   }
 
   const errors: Partial<Record<EnquiryField, string>> = {};
 
-  if (!values.name) errors.name = "Enter your name.";
-  if (!values.email) errors.email = "Enter your email address.";
+  if (!values.name) errors.name = t("Enter your name.");
+  if (!values.email) errors.email = t("Enter your email address.");
   else if (!EMAIL_PATTERN.test(values.email))
-    errors.email = "Enter a valid email address, such as name@example.com.";
+    errors.email = t("Enter a valid email address, such as name@example.com.");
   if (!enquiryTypes.some((type) => type.value === values.enquiryType))
-    errors.enquiryType = "Choose what your enquiry is about.";
-  if (!values.message) errors.message = "Tell us what you need.";
+    errors.enquiryType = t("Choose what your enquiry is about.");
+  if (!values.message) errors.message = t("Tell us what you need.");
   else if (values.message.length < 10)
-    errors.message = "Add a little more detail so we can help.";
+    errors.message = t("Add a little more detail so we can help.");
   if (formData.get("consent") !== "on")
-    errors.consent = "Confirm that we may use your details to reply.";
+    errors.consent = t("Confirm that we may use your details to reply.");
 
   for (const key of Object.keys(limits) as (keyof EnquiryValues)[]) {
     if (!errors[key] && values[key].length > limits[key]) {
-      errors[key] = `Keep this under ${limits[key]} characters.`;
+      errors[key] = t("Keep this under {limit} characters.", { limit: limits[key] });
     }
   }
 
   if (Object.keys(errors).length > 0) {
     return {
       status: "invalid",
-      message: "Check the highlighted fields and try again.",
+      message: t("Check the highlighted fields and try again."),
       errors,
       values,
     };
@@ -85,7 +92,7 @@ export async function submitEnquiry(
     return {
       status: "unavailable",
       message:
-        "Online enquiries are not connected yet, so your message has not been sent.",
+        t("Online enquiries are not connected yet, so your message has not been sent."),
       values,
     };
   }
@@ -94,7 +101,7 @@ export async function submitEnquiry(
     const response = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ source: "1heiz-website", ...values }),
+      body: JSON.stringify({ source: "1heiz-website", language: locale, ...values }),
       signal: AbortSignal.timeout(10_000),
       cache: "no-store",
     });
@@ -105,13 +112,13 @@ export async function submitEnquiry(
     return {
       status: "failed",
       message:
-        "Something went wrong and your enquiry was not sent. Please try again in a moment.",
+        t("Something went wrong and your enquiry was not sent. Please try again in a moment."),
       values,
     };
   }
 
   return {
     status: "sent",
-    message: "Thank you. Your enquiry has been sent and we will reply by email.",
+    message: t("Thank you. Your enquiry has been sent and we will reply by email."),
   };
 }

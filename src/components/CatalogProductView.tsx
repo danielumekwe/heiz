@@ -1,6 +1,8 @@
 import Image from "next/image";
 import type { CatalogProduct } from "@/data/catalog";
 import { catalog, categoryAnchor } from "@/data/catalog";
+import { catalogCardLabels, localizeCatalogProduct } from "@/i18n/content";
+import { getT } from "@/i18n/server";
 import { BrochureButton } from "./Brochure";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { ButtonLink } from "./ButtonLink";
@@ -10,15 +12,18 @@ import { CtaBand } from "./CtaBand";
 import { SectionHeading } from "./SectionHeading";
 
 /** Detail page for a product imported from the previous shop. */
-export function CatalogProductView({ product }: { product: CatalogProduct }) {
+export async function CatalogProductView({ product: source }: { product: CatalogProduct }) {
+  const t = await getT();
+  const product = localizeCatalogProduct(t, source);
+  const cardLabels = catalogCardLabels(t);
   const enquiryHref = `/contact?type=range&product=${product.slug}#enquiry`;
   const [, ...morePhotos] = product.images;
   const related = catalog
     .filter(
       (item) => item.category === product.category && item.slug !== product.slug,
     )
-    .slice(0, 4);
-  const illustrative = product.images.length === 0 && product.illustration;
+    .slice(0, 4)
+    .map((item) => localizeCatalogProduct(t, item));
 
   return (
     <>
@@ -26,10 +31,10 @@ export function CatalogProductView({ product }: { product: CatalogProduct }) {
         items={[
           { label: "Products", href: "/products" },
           {
-            label: product.category,
-            href: `/products#${categoryAnchor(product.category)}`,
+            label: source.category,
+            href: `/products#${categoryAnchor(source.category)}`,
           },
-          { label: product.name, href: `/products/${product.slug}` },
+          { label: source.name, href: `/products/${product.slug}` },
         ]}
       />
 
@@ -40,6 +45,7 @@ export function CatalogProductView({ product }: { product: CatalogProduct }) {
               product={product}
               frame="aspect-[4/3]"
               sizes="(min-width: 1024px) 50vw, 100vw"
+              emptyLabel={cardLabels.photoOnRequest}
               priority
             />
             {morePhotos.length > 0 ? (
@@ -62,30 +68,25 @@ export function CatalogProductView({ product }: { product: CatalogProduct }) {
             ) : null}
             {product.conceptPackaging ? (
               <p className="mt-3 text-sm text-muted">
-                Packaging shown is a design concept. Final packaging may differ.
-              </p>
-            ) : null}
-            {illustrative ? (
-              <p className="mt-3 text-sm text-muted">
-                Illustrative image. Ask us for photos of the current product.
+                {t("Packaging shown is a design concept. Final packaging may differ.")}
               </p>
             ) : null}
           </div>
 
           <div className="lg:py-4">
-            <p className="eyebrow">{product.category}</p>
+            <p className="eyebrow">{product.categoryLabel}</p>
             <h1 className="mt-4 text-[2.2rem] font-semibold sm:text-[2.75rem]">
               {product.name}
             </h1>
             <p className="mt-6 text-[1.1rem] text-muted">{product.summary}</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href={enquiryHref}>Request a Quote</ButtonLink>
+              <ButtonLink href={enquiryHref}>{cardLabels.quote}</ButtonLink>
               <BrochureButton />
             </div>
             <p className="mt-6 border-t border-sand pt-5 text-sm text-muted">
-              Price, availability and delivery are confirmed for each enquiry.
+              {t("Price, availability and delivery are confirmed for each enquiry.")}
               {product.qualityNote
-                ? " Quality and certification documents for the product on offer are provided with your quote."
+                ? ` ${t("Quality and certification documents for the product on offer are provided with your quote.")}`
                 : ""}
             </p>
           </div>
@@ -94,7 +95,7 @@ export function CatalogProductView({ product }: { product: CatalogProduct }) {
 
       <section className="bg-paper">
         <div className="site-container max-w-3xl py-14 lg:py-20">
-          <h2 className="sr-only">Product details</h2>
+          <h2 className="sr-only">{t("Product details")}</h2>
           <div className="prose-1heiz text-[1.05rem]">
             {product.body.map((block, index) => {
               if (block.type === "heading")
@@ -118,11 +119,12 @@ export function CatalogProductView({ product }: { product: CatalogProduct }) {
           <div className="site-container py-16 lg:py-20">
             <SectionHeading
               eyebrow="Related"
-              title={`More in ${product.category}`}
+              title="More in {category}"
+              titleVars={{ category: product.categoryLabel }}
             />
             <div className="mt-10 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
               {related.map((item) => (
-                <CatalogCard key={item.slug} product={item} />
+                <CatalogCard key={item.slug} product={item} labels={cardLabels} />
               ))}
             </div>
           </div>
@@ -130,7 +132,8 @@ export function CatalogProductView({ product }: { product: CatalogProduct }) {
       ) : null}
 
       <CtaBand
-        title={`Enquire about ${product.name}`}
+        title="Enquire about {product}"
+        titleVars={{ product: product.name }}
         body="Send us your quantity and delivery location and we will confirm availability and pricing."
         cta="Request a Quote"
         href={enquiryHref}

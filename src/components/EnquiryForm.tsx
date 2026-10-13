@@ -2,46 +2,33 @@
 
 import { useActionState, useEffect, useRef } from "react";
 import { submitEnquiry } from "@/app/actions/enquiry";
-import {
-  enquiryTypes,
-  initialEnquiryState,
-  type EnquiryField,
-} from "@/lib/enquiry";
-import { catalog } from "@/data/catalog";
-import { products } from "@/data/products";
+import type { EnquiryFormContent } from "@/i18n/content";
+import { rich } from "@/i18n/translate";
+import { initialEnquiryState, type EnquiryField } from "@/lib/enquiry";
 import { buttonClass } from "./ButtonLink";
+import Link, { useLocale } from "./LocaleLink";
 
 const inputClass =
   "mt-2 block w-full border border-sand bg-white px-4 py-3 text-base text-charcoal placeholder:text-muted/70 focus:border-forest-800 focus:outline-2 focus:outline-offset-0 focus:outline-forest-800 aria-[invalid=true]:border-red-700";
 
-const productOptions = [
-  {
-    label: "Wood pellets and supply formats",
-    items: products.map((product) => ({
-      value: product.name,
-      label: product.name,
-    })),
-  },
-  {
-    label: "Full product range",
-    items: catalog.map((product) => ({
-      value: product.name,
-      label: product.name,
-    })),
-  },
-];
+const labelClass = "font-display text-sm font-semibold";
 
+/** Enquiry form. All visible text arrives translated in `content`. */
 export function EnquiryForm({
+  content,
   defaultType = "general",
   defaultProduct,
   defaultMessage,
   contactEmail,
 }: {
+  content: EnquiryFormContent;
   defaultType?: string;
   defaultProduct?: string;
   defaultMessage?: string;
   contactEmail?: string;
 }) {
+  const { labels, types, productGroups } = content;
+  const locale = useLocale();
   const [state, formAction, pending] = useActionState(
     submitEnquiry,
     initialEnquiryState,
@@ -68,7 +55,7 @@ export function EnquiryForm({
         role="status"
         className="border border-forest-200 bg-forest-100 p-8"
       >
-        <h3 className="text-2xl font-semibold text-forest-900">Enquiry sent</h3>
+        <h3 className="text-2xl font-semibold text-forest-900">{labels.sentTitle}</h3>
         <p className="mt-3 text-forest-900">{state.message}</p>
       </div>
     );
@@ -87,6 +74,10 @@ export function EnquiryForm({
       </p>
     ) : null;
 
+  const hint = (text: string) => (
+    <span className="font-normal text-muted">{text}</span>
+  );
+
   const showBanner =
     state.status === "invalid" ||
     state.status === "failed" ||
@@ -94,6 +85,8 @@ export function EnquiryForm({
 
   return (
     <form ref={formRef} action={formAction} noValidate className="space-y-6">
+      <input type="hidden" name="lang" value={locale} />
+
       {showBanner ? (
         <div
           ref={statusRef}
@@ -104,31 +97,26 @@ export function EnquiryForm({
           <p className="font-semibold">{state.message}</p>
           {state.status === "unavailable" ? (
             <p className="mt-1 text-[0.95rem]">
-              {contactEmail ? (
-                <>
-                  Please email us at{" "}
-                  <a className="underline" href={`mailto:${contactEmail}`}>
-                    {contactEmail}
-                  </a>{" "}
-                  instead. Your details are still in the form below.
-                </>
-              ) : (
-                "Please try again later. Your details are still in the form below."
-              )}
+              {contactEmail
+                ? rich(labels.emailInstead, {
+                    email: () => (
+                      <a className="underline" href={`mailto:${contactEmail}`}>
+                        {contactEmail}
+                      </a>
+                    ),
+                  })
+                : labels.tryLater}
             </p>
           ) : null}
         </div>
       ) : null}
 
-      <p className="text-sm text-muted">
-        Fields marked <span aria-hidden="true">*</span>
-        <span className="sr-only">with an asterisk</span> are required.
-      </p>
+      <p className="text-sm text-muted">{labels.requiredNote}</p>
 
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
-          <label htmlFor="name" className="font-display text-sm font-semibold">
-            Name *
+          <label htmlFor="name" className={labelClass}>
+            {labels.name} *
           </label>
           <input
             id="name"
@@ -144,8 +132,8 @@ export function EnquiryForm({
           {fieldError("name")}
         </div>
         <div>
-          <label htmlFor="company" className="font-display text-sm font-semibold">
-            Company <span className="font-normal text-muted">(if applicable)</span>
+          <label htmlFor="company" className={labelClass}>
+            {labels.company} {hint(labels.ifApplicable)}
           </label>
           <input
             id="company"
@@ -160,8 +148,8 @@ export function EnquiryForm({
           {fieldError("company")}
         </div>
         <div>
-          <label htmlFor="email" className="font-display text-sm font-semibold">
-            Email *
+          <label htmlFor="email" className={labelClass}>
+            {labels.email} *
           </label>
           <input
             id="email"
@@ -178,8 +166,8 @@ export function EnquiryForm({
           {fieldError("email")}
         </div>
         <div>
-          <label htmlFor="phone" className="font-display text-sm font-semibold">
-            Phone <span className="font-normal text-muted">(optional)</span>
+          <label htmlFor="phone" className={labelClass}>
+            {labels.phone} {hint(labels.optional)}
           </label>
           <input
             id="phone"
@@ -194,11 +182,8 @@ export function EnquiryForm({
           {fieldError("phone")}
         </div>
         <div>
-          <label
-            htmlFor="enquiryType"
-            className="font-display text-sm font-semibold"
-          >
-            Enquiry type *
+          <label htmlFor="enquiryType" className={labelClass}>
+            {labels.enquiryType} *
           </label>
           <select
             id="enquiryType"
@@ -209,7 +194,7 @@ export function EnquiryForm({
             aria-describedby={describe("enquiryType")}
             className={`${inputClass} h-[3.125rem]`}
           >
-            {enquiryTypes.map((type) => (
+            {types.map((type) => (
               <option key={type.value} value={type.value}>
                 {type.label}
               </option>
@@ -218,15 +203,14 @@ export function EnquiryForm({
           {fieldError("enquiryType")}
         </div>
         <div>
-          <label htmlFor="quantity" className="font-display text-sm font-semibold">
-            Estimated quantity{" "}
-            <span className="font-normal text-muted">(optional)</span>
+          <label htmlFor="quantity" className={labelClass}>
+            {labels.quantity} {hint(labels.optional)}
           </label>
           <input
             id="quantity"
             name="quantity"
             type="text"
-            placeholder="e.g. 2 pallets, or tonnes per year"
+            placeholder={labels.quantityPlaceholder}
             defaultValue={values?.quantity}
             aria-invalid={Boolean(errors.quantity)}
             aria-describedby={describe("quantity")}
@@ -237,8 +221,8 @@ export function EnquiryForm({
       </div>
 
       <div>
-        <label htmlFor="product" className="font-display text-sm font-semibold">
-          Product <span className="font-normal text-muted">(optional)</span>
+        <label htmlFor="product" className={labelClass}>
+          {labels.product} {hint(labels.optional)}
         </label>
         <select
           id="product"
@@ -248,11 +232,11 @@ export function EnquiryForm({
           aria-describedby={describe("product")}
           className={`${inputClass} h-[3.125rem]`}
         >
-          <option value="">Select a product</option>
-          {productOptions.map((group) => (
+          <option value="">{labels.selectProduct}</option>
+          {productGroups.map((group) => (
             <optgroup key={group.label} label={group.label}>
               {group.items.map((product) => (
-                <option key={`${group.label}-${product.value}`} value={product.value}>
+                <option key={product.value} value={product.value}>
                   {product.label}
                 </option>
               ))}
@@ -263,15 +247,14 @@ export function EnquiryForm({
       </div>
 
       <div>
-        <label htmlFor="location" className="font-display text-sm font-semibold">
-          Delivery location{" "}
-          <span className="font-normal text-muted">(optional)</span>
+        <label htmlFor="location" className={labelClass}>
+          {labels.location} {hint(labels.optional)}
         </label>
         <input
           id="location"
           name="location"
           type="text"
-          placeholder="Town or postcode, and country"
+          placeholder={labels.locationPlaceholder}
           autoComplete="address-level2"
           defaultValue={values?.location}
           aria-invalid={Boolean(errors.location)}
@@ -282,8 +265,8 @@ export function EnquiryForm({
       </div>
 
       <div>
-        <label htmlFor="message" className="font-display text-sm font-semibold">
-          Message *
+        <label htmlFor="message" className={labelClass}>
+          {labels.message} *
         </label>
         <textarea
           id="message"
@@ -300,7 +283,7 @@ export function EnquiryForm({
 
       {/* Honeypot field, hidden from people and assistive technology. */}
       <div aria-hidden="true" className="hidden">
-        <label htmlFor="website">Website</label>
+        <label htmlFor="website">{labels.website}</label>
         <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
@@ -315,15 +298,17 @@ export function EnquiryForm({
             className="mt-1 size-5 shrink-0 accent-forest-800"
           />
           <span>
-            I agree that 1heiz may use these details to respond to my enquiry, as
-            described in the{" "}
-            <a
-              href="/privacy-policy"
-              className="text-forest-800 underline underline-offset-4"
-            >
-              privacy policy
-            </a>
-            . *
+            {rich(labels.consent, {
+              link: (text) => (
+                <Link
+                  href="/privacy-policy"
+                  className="text-forest-800 underline underline-offset-4"
+                >
+                  {text}
+                </Link>
+              ),
+            })}{" "}
+            *
           </span>
         </label>
         {fieldError("consent")}
@@ -334,7 +319,7 @@ export function EnquiryForm({
         disabled={pending}
         className={`${buttonClass("primary")} w-full disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto`}
       >
-        {pending ? "Sending…" : "Send Enquiry"}
+        {pending ? labels.sending : labels.send}
       </button>
     </form>
   );

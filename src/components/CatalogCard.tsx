@@ -1,8 +1,17 @@
-import Link from "next/link";
-import type { CatalogProduct } from "@/data/catalog";
+import type { LocalizedCatalogProduct } from "@/i18n/content";
 import { CatalogVisual } from "./CatalogVisual";
+import Link from "./LocaleLink";
 
-export function CatalogCard({ product }: { product: CatalogProduct }) {
+export type CatalogCardLabels = { quote: string; photoOnRequest: string };
+
+/** Catalogue product teaser. The product and labels arrive translated. */
+export function CatalogCard({
+  product,
+  labels,
+}: {
+  product: LocalizedCatalogProduct;
+  labels: CatalogCardLabels;
+}) {
   const enquiryHref = `/contact?type=range&product=${product.slug}#enquiry`;
 
   return (
@@ -12,6 +21,7 @@ export function CatalogCard({ product }: { product: CatalogProduct }) {
           product={product}
           frame="aspect-[4/3]"
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+          emptyLabel={labels.photoOnRequest}
           imageClassName="transition-transform duration-500 ease-out group-hover:scale-[1.03]"
         />
       </Link>
@@ -32,7 +42,7 @@ export function CatalogCard({ product }: { product: CatalogProduct }) {
             href={enquiryHref}
             className="inline-flex min-h-11 items-center justify-center border border-forest-800 px-4 py-2 font-display text-sm font-semibold text-forest-800 transition-colors hover:bg-forest-800 hover:text-cream"
           >
-            Request a Quote
+            {labels.quote}
           </Link>
         </div>
       </div>

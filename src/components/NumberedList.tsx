@@ -1,7 +1,9 @@
+import { getT } from "@/i18n/server";
+
 export type NumberedItem = { title: string; body: string };
 
 /** Hairline-ruled numbered list used for strengths, steps and checklists. */
-export function NumberedList({
+export async function NumberedList({
   items,
   columns = 1,
   tone = "dark",
@@ -11,6 +13,7 @@ export function NumberedList({
   tone?: "dark" | "light";
 }) {
   const light = tone === "light";
+  const t = await getT();
 
   return (
     <ol className={`grid gap-x-12 ${columns === 2 ? "md:grid-cols-2" : ""}`}>
@@ -33,14 +36,14 @@ export function NumberedList({
             <h3
               className={`text-[1.15rem] font-semibold ${light ? "text-cream" : ""}`}
             >
-              {item.title}
+              {t(item.title)}
             </h3>
             <p
               className={`mt-1.5 text-[0.97rem] ${
                 light ? "text-cream/75" : "text-muted"
               }`}
             >
-              {item.body}
+              {t(item.body)}
             </p>
           </div>
         </li>

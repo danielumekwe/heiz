@@ -1,12 +1,17 @@
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 import { brochure, legalNav, mainNav, site, supplyNav, type NavItem } from "@/data/site";
+import { testimonials } from "@/data/testimonials";
+import { getT } from "@/i18n/server";
 import { Wordmark } from "./Wordmark";
+import { T } from "./T";
 
-function FooterList({ title, items }: { title: string; items: NavItem[] }) {
+async function FooterList({ title, items }: { title: string; items: NavItem[] }) {
+  const t = await getT();
+
   return (
     <div>
       <h2 className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-wood-400">
-        {title}
+        {t(title)}
       </h2>
       <ul className="mt-4 space-y-1">
         {items.map((item) => (
@@ -15,7 +20,7 @@ function FooterList({ title, items }: { title: string; items: NavItem[] }) {
               href={item.href}
               className="inline-flex min-h-9 items-center text-[0.95rem] text-cream/85 transition-colors hover:text-white hover:underline hover:underline-offset-4"
             >
-              {item.label}
+              {t(item.label)}
             </Link>
           </li>
         ))}
@@ -24,7 +29,8 @@ function FooterList({ title, items }: { title: string; items: NavItem[] }) {
   );
 }
 
-export function Footer() {
+export async function Footer() {
+  const t = await getT();
   const { email, phone } = site.contact;
   const { legalName, address } = site.company;
 
@@ -34,18 +40,28 @@ export function Footer() {
         <div className="max-w-sm">
           <Wordmark tone="light" />
           <p className="mt-5 text-[0.95rem] text-cream/75">
-            Wood pellets for biomass heating, supplied bagged, in bulk and to
+            <T>Wood pellets for biomass heating, supplied bagged, in bulk and to
             wholesale buyers. Enquiries are handled personally, with product
-            details and pricing confirmed in your quote.
+            details and pricing confirmed in your quote.</T>
           </p>
         </div>
 
         <FooterList title="Products & supply" items={supplyNav} />
-        <FooterList title="Company" items={mainNav.slice(3)} />
+        <FooterList
+          title="Company"
+          items={[
+            ...mainNav.slice(3, -1),
+            { label: "FAQ", href: "/faq" },
+            ...(testimonials.length > 0
+              ? [{ label: "Testimonials", href: "/testimonials" }]
+              : []),
+            ...mainNav.slice(-1),
+          ]}
+        />
 
         <div>
           <h2 className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-wood-400">
-            Get in touch
+            <T>Get in touch</T>
           </h2>
           <ul className="mt-4 space-y-1 text-[0.95rem] text-cream/85">
             {address ? <li className="whitespace-pre-line pb-2">{address}</li> : null}
@@ -75,7 +91,7 @@ export function Footer() {
                 download={brochure.downloadName}
                 className="inline-flex min-h-9 items-center hover:text-white hover:underline hover:underline-offset-4"
               >
-                Download brochure (PDF)
+                <T>Download brochure (PDF)</T>
               </a>
             </li>
             <li>
@@ -83,7 +99,7 @@ export function Footer() {
                 href="/contact"
                 className="inline-flex min-h-9 items-center hover:text-white hover:underline hover:underline-offset-4"
               >
-                Send an enquiry
+                <T>Send an enquiry</T>
               </Link>
             </li>
           </ul>
@@ -93,7 +109,7 @@ export function Footer() {
       <div className="border-t border-cream/15">
         <div className="site-container flex flex-col gap-3 py-6 text-sm text-cream/65 md:flex-row md:items-center md:justify-between">
           <p>
-            © {site.copyrightYear} {legalName || site.name}. All rights reserved.
+            © {site.copyrightYear} {legalName || site.name}. {t("All rights reserved.")}
           </p>
           <ul className="flex flex-wrap gap-x-6 gap-y-1">
             {legalNav.map((item) => (
@@ -102,7 +118,7 @@ export function Footer() {
                   href={item.href}
                   className="inline-flex min-h-9 items-center hover:text-white hover:underline hover:underline-offset-4"
                 >
-                  {item.label}
+                  {t(item.label)}
                 </Link>
               </li>
             ))}

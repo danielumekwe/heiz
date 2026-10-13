@@ -4,6 +4,7 @@ export const enquiryTypes = [
   { value: "bulk", label: "Bulk supply" },
   { value: "wholesale", label: "Wholesale pricing" },
   { value: "range", label: "Firewood, briquettes, logs and other products" },
+  { value: "feedback", label: "Feedback on an order" },
 ] as const;
 
 export type EnquiryField =

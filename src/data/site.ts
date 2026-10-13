@@ -75,7 +75,6 @@ export const supplyNav: NavItem[] = [
 export const legalNav: NavItem[] = [
   { label: "Privacy Policy", href: "/privacy-policy" },
   { label: "Legal Notice", href: "/legal-notice" },
-  { label: "Image Credits", href: "/image-credits" },
 ];
 
 export const brochure = {

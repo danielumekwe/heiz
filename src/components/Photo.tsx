@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { images, type ImageKey } from "@/data/images";
+import { getT } from "@/i18n/server";
 
 type PhotoProps = {
   image: ImageKey;
@@ -14,7 +15,7 @@ type PhotoProps = {
 };
 
 /** Registry-backed image inside a fixed-ratio frame, so layout never shifts. */
-export function Photo({
+export async function Photo({
   image,
   frame = "aspect-[4/3]",
   sizes,
@@ -24,12 +25,14 @@ export function Photo({
   imageClassName = "",
 }: PhotoProps) {
   const data = images[image];
+  const t = await getT();
+  const altText = alt ?? data.alt;
 
   return (
     <div className={`relative overflow-hidden bg-beige ${frame} ${className}`}>
       <Image
         src={data.src}
-        alt={alt ?? data.alt}
+        alt={altText ? t(altText) : ""}
         fill
         sizes={sizes}
         priority={priority}

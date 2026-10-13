@@ -1,5 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
+import { getT } from "@/i18n/server";
 
 const logo = {
   src: "/images/brand/1heiz-wood-pellets-logo.webp",
@@ -12,11 +13,13 @@ const logo = {
  * The artwork is dark green, so on dark backgrounds it sits on a cream plate
  * rather than being recoloured.
  */
-export function Wordmark({ tone = "dark" }: { tone?: "dark" | "light" }) {
+export async function Wordmark({ tone = "dark" }: { tone?: "dark" | "light" }) {
+  const t = await getT();
+
   return (
     <Link
       href="/"
-      aria-label="1heiz Wood Pellets, home"
+      aria-label={t("1heiz Wood Pellets, home")}
       className={`inline-flex shrink-0 items-center ${
         tone === "light" ? "bg-cream px-4 py-3" : ""
       }`}

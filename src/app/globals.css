@@ -40,6 +40,7 @@
     font-family: var(--font-sans);
     line-height: 1.65;
     overflow-x: clip;
+    overflow-wrap: break-word;
   }
 
   h1,
@@ -51,6 +52,7 @@
     line-height: 1.08;
     letter-spacing: -0.02em;
     text-wrap: balance;
+    hyphens: auto;
   }
 
   p {

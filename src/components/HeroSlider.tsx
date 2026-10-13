@@ -8,9 +8,10 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
+import { interpolate } from "@/i18n/translate";
 import { ButtonLink } from "./ButtonLink";
 
-type Slide = {
+export type Slide = {
   id: string;
   eyebrow: string;
   title: string;
@@ -22,49 +23,6 @@ type Slide = {
   /** Cut-out product image shown beside the copy on a plain green field. */
   product?: { src: string; width: number; height: number; alt: string };
 };
-
-const slides: Slide[] = [
-  {
-    id: "brand",
-    eyebrow: "Wood pellets & biomass fuel",
-    title: "Premium Wood Pellets for a Cleaner Energy Future",
-    body: "Discover wood-pellet supply options for homes, businesses, and wholesale buyers.",
-    primary: { label: "Explore Our Products", href: "/products" },
-    secondary: { label: "Request a Quote", href: "/contact#enquiry" },
-    background: {
-      src: "/images/hero/1heiz-wood-pellets-hero.webp",
-      alt: "Light-brown wood pellets heaped in warm daylight",
-    },
-  },
-  {
-    id: "bulk",
-    eyebrow: "Packaging option 1",
-    title: "In Bulk, for Pellet Stores and Silos",
-    body: "Loose pellets for automated boilers that draw from a dedicated store, with no bags to carry, open or dispose of.",
-    primary: { label: "Explore Bulk Supply", href: "/bulk-supply" },
-    secondary: { label: "Request a Bulk Quote", href: "/contact?type=bulk#enquiry" },
-    product: {
-      src: "/images/brand/1heiz-bulk-pellet-truck.webp",
-      width: 819,
-      height: 1100,
-      alt: "Rear view of a bulk pellet delivery truck in 1heiz Wood Pellets livery",
-    },
-  },
-  {
-    id: "bagged",
-    eyebrow: "Packaging option 2",
-    title: "In 15 kg Bags, Easy to Carry and Store",
-    body: "Sealed bags for pellet stoves and anyone without a bulk store, supplied by the bag or by the pallet.",
-    primary: { label: "View Bagged Pellets", href: "/products/bagged-wood-pellets" },
-    secondary: { label: "Enquire About Availability", href: "/contact?type=bagged#enquiry" },
-    product: {
-      src: "/images/brand/1heiz-premium-wood-pellets-bag.webp",
-      width: 615,
-      height: 1100,
-      alt: "Paper bag of 1heiz Premium Wood Pellets",
-    },
-  },
-];
 
 const INTERVAL = 7000;
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
@@ -95,8 +53,26 @@ function Chevron({ direction }: { direction: "left" | "right" }) {
 const controlClass =
   "inline-flex size-11 items-center justify-center border border-cream/40 text-cream transition-colors hover:bg-cream hover:text-forest-900";
 
-/** Home page hero: an accessible, auto-advancing carousel. */
-export function HeroSlider() {
+export type HeroSliderLabels = {
+  region: string;
+  /** e.g. "{current} of {total}" */
+  position: string;
+  /** e.g. "Show slide {number}: {title}" */
+  showSlide: string;
+  pause: string;
+  play: string;
+  previous: string;
+  next: string;
+};
+
+/** Home page hero: an accessible, auto-advancing carousel. Text arrives translated. */
+export function HeroSlider({
+  slides,
+  labels,
+}: {
+  slides: Slide[];
+  labels: HeroSliderLabels;
+}) {
   const [index, setIndex] = useState(0);
   // Auto-advance is off by default for visitors who prefer reduced motion;
   // the play button still lets them opt in.
@@ -110,9 +86,11 @@ export function HeroSlider() {
   const [hovering, setHovering] = useState(false);
   const regionRef = useRef<HTMLElement>(null);
 
-  const go = useCallback((next: number) => {
-    setIndex((next + slides.length) % slides.length);
-  }, []);
+  const count = slides.length;
+  const go = useCallback(
+    (next: number) => setIndex((next + count) % count),
+    [count],
+  );
 
   useEffect(() => {
     if (!playing || hovering) return;
@@ -124,7 +102,7 @@ export function HeroSlider() {
     <section
       ref={regionRef}
       aria-roledescription="carousel"
-      aria-label="Highlights"
+      aria-label={labels.region}
       className="on-dark relative isolate overflow-hidden bg-forest-950"
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
@@ -148,7 +126,10 @@ export function HeroSlider() {
               key={slide.id}
               role="group"
               aria-roledescription="slide"
-              aria-label={`${slideIndex + 1} of ${slides.length}`}
+              aria-label={interpolate(labels.position, {
+                current: slideIndex + 1,
+                total: slides.length,
+              })}
               inert={!active}
               className={`relative col-start-1 row-start-1 flex items-end transition-opacity duration-700 ease-out ${
                 active ? "z-10 opacity-100" : "opacity-0"
@@ -220,7 +201,10 @@ export function HeroSlider() {
             <button
               key={slide.id}
               type="button"
-              aria-label={`Show slide ${slideIndex + 1}: ${slide.title}`}
+              aria-label={interpolate(labels.showSlide, {
+                number: slideIndex + 1,
+                title: slide.title,
+              })}
               aria-current={slideIndex === index ? "true" : undefined}
               onClick={() => go(slideIndex)}
               className="group flex h-11 items-center px-1"
@@ -242,7 +226,7 @@ export function HeroSlider() {
             className={controlClass}
           >
             <span className="sr-only">
-              {playing ? "Pause slideshow" : "Play slideshow"}
+              {playing ? labels.pause : labels.play}
             </span>
             <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4" fill="currentColor">
               {playing ? (
@@ -254,7 +238,7 @@ export function HeroSlider() {
           </button>
           <button
             type="button"
-            aria-label="Previous slide"
+            aria-label={labels.previous}
             onClick={() => go(index - 1)}
             className={controlClass}
           >
@@ -262,7 +246,7 @@ export function HeroSlider() {
           </button>
           <button
             type="button"
-            aria-label="Next slide"
+            aria-label={labels.next}
             onClick={() => go(index + 1)}
             className={controlClass}
           >

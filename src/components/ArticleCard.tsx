@@ -1,8 +1,11 @@
-import Link from "next/link";
+import Link from "@/components/LocaleLink";
 import type { Article } from "@/data/resources";
+import { getT } from "@/i18n/server";
 import { Photo } from "./Photo";
 
-export function ArticleCard({ article }: { article: Article }) {
+export async function ArticleCard({ article }: { article: Article }) {
+  const t = await getT();
+
   return (
     <article className="group relative flex flex-col">
       <Photo
@@ -14,21 +17,21 @@ export function ArticleCard({ article }: { article: Article }) {
       />
       <div className="flex flex-1 flex-col border-b border-sand pb-6 pt-5">
         <p className="eyebrow">
-          {article.topic}
+          {t(article.topic)}
           <span className="mx-2 text-sand" aria-hidden="true">
             /
           </span>
-          <span className="tracking-[0.12em]">{article.readingMinutes} min read</span>
+          <span className="tracking-[0.12em]">{t("{minutes} min read", { minutes: article.readingMinutes })}</span>
         </p>
         <h3 className="mt-3 text-[1.3rem] font-semibold">
           <Link
             href={`/resources/${article.slug}`}
             className="after:absolute after:inset-0 group-hover:text-forest-800"
           >
-            {article.title}
+            {t(article.title)}
           </Link>
         </h3>
-        <p className="mt-2 text-[0.97rem] text-muted">{article.excerpt}</p>
+        <p className="mt-2 text-[0.97rem] text-muted">{t(article.excerpt)}</p>
       </div>
     </article>
   );

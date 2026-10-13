@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
 import type { ImageKey } from "@/data/images";
+import { getT } from "@/i18n/server";
 import { Photo } from "./Photo";
 
 /** Image-led editorial section with copy on one side and a photograph on the other. */
-export function SplitSection({
+export async function SplitSection({
   image,
   imageSide = "left",
   frame = "aspect-[4/3] lg:aspect-[5/4]",
@@ -18,6 +19,8 @@ export function SplitSection({
   caption?: string;
   children: ReactNode;
 }) {
+  const t = await getT();
+
   return (
     <section className={background}>
       <div className="site-container grid items-center gap-10 py-16 lg:grid-cols-2 lg:gap-20 lg:py-28">
@@ -28,7 +31,7 @@ export function SplitSection({
             sizes="(min-width: 1024px) 50vw, 100vw"
           />
           {caption ? (
-            <figcaption className="mt-3 text-sm text-muted">{caption}</figcaption>
+            <figcaption className="mt-3 text-sm text-muted">{t(caption)}</figcaption>
           ) : null}
         </figure>
         <div>{children}</div>
