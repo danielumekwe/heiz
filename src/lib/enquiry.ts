@@ -12,6 +12,7 @@ export type EnquiryField =
   | "email"
   | "phone"
   | "enquiryType"
+  | "product"
   | "quantity"
   | "location"
   | "message"

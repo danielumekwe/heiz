@@ -1,13 +1,12 @@
 import { ButtonLink } from "@/components/ButtonLink";
 import { BrochureBand, BrochureButton } from "@/components/Brochure";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { CatalogCard } from "@/components/CatalogCard";
 import { CtaBand } from "@/components/CtaBand";
 import { NumberedList } from "@/components/NumberedList";
 import { PageHero } from "@/components/PageHero";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductCategoryTabs } from "@/components/ProductCategoryTabs";
 import { SectionHeading } from "@/components/SectionHeading";
-import { catalog, catalogCategories, categoryAnchor } from "@/data/catalog";
 import { products } from "@/data/products";
 import { quoteHref } from "@/data/site";
 import { pageMetadata } from "@/lib/metadata";
@@ -60,6 +59,7 @@ export default function ProductsPage() {
                 description={product.summary}
                 image={product.image}
                 cta="View details"
+                quoteHref={`/contact?type=${product.enquiryType}&product=${product.slug}#enquiry`}
                 label={product.category}
                 note={
                   product.conceptPackaging
@@ -74,50 +74,19 @@ export default function ProductsPage() {
 
       <section id="range" className="scroll-mt-24 border-t border-sand/70 bg-paper">
         <div className="site-container py-16 lg:py-24">
-          <SectionHeading eyebrow="Full range" title="Wood fuels, timber and packaging">
+          <div className="mb-10 grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-16">
+            <SectionHeading eyebrow="Full range" title="Browse by category">
+              <p>
+                Use All to see the complete range, or choose a category to
+                narrow the list.
+              </p>
+            </SectionHeading>
             <p>
               Alongside wood pellets we supply briquettes, firewood, round
               logs, agricultural pellets and bedding, and pallets and crates.
             </p>
-          </SectionHeading>
-          <nav aria-label="Product categories" className="mt-8">
-            <ul className="flex flex-wrap gap-2">
-              {catalogCategories.map((category) => (
-                <li key={category}>
-                  <a
-                    href={`#${categoryAnchor(category)}`}
-                    className="inline-flex min-h-11 items-center border border-sand px-4 font-display text-sm font-semibold text-charcoal transition-colors hover:border-forest-800 hover:text-forest-800"
-                  >
-                    {category}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {catalogCategories.map((category) => {
-            const items = catalog.filter((item) => item.category === category);
-            if (items.length === 0) return null;
-            return (
-              <div
-                key={category}
-                id={categoryAnchor(category)}
-                className="mt-14 scroll-mt-28"
-              >
-                <h3 className="flex items-baseline gap-3 border-b border-charcoal/80 pb-3 text-[1.5rem] font-semibold">
-                  {category}
-                  <span className="font-sans text-sm font-normal text-muted">
-                    {items.length} {items.length === 1 ? "product" : "products"}
-                  </span>
-                </h3>
-                <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-                  {items.map((item) => (
-                    <CatalogCard key={item.slug} product={item} />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+          </div>
+          <ProductCategoryTabs />
         </div>
       </section>
 

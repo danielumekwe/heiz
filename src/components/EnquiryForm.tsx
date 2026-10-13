@@ -7,17 +7,38 @@ import {
   initialEnquiryState,
   type EnquiryField,
 } from "@/lib/enquiry";
+import { catalog } from "@/data/catalog";
+import { products } from "@/data/products";
 import { buttonClass } from "./ButtonLink";
 
 const inputClass =
   "mt-2 block w-full border border-sand bg-white px-4 py-3 text-base text-charcoal placeholder:text-muted/70 focus:border-forest-800 focus:outline-2 focus:outline-offset-0 focus:outline-forest-800 aria-[invalid=true]:border-red-700";
 
+const productOptions = [
+  {
+    label: "Wood pellets and supply formats",
+    items: products.map((product) => ({
+      value: product.name,
+      label: product.name,
+    })),
+  },
+  {
+    label: "Full product range",
+    items: catalog.map((product) => ({
+      value: product.name,
+      label: product.name,
+    })),
+  },
+];
+
 export function EnquiryForm({
   defaultType = "general",
+  defaultProduct,
   defaultMessage,
   contactEmail,
 }: {
   defaultType?: string;
+  defaultProduct?: string;
   defaultMessage?: string;
   contactEmail?: string;
 }) {
@@ -213,6 +234,32 @@ export function EnquiryForm({
           />
           {fieldError("quantity")}
         </div>
+      </div>
+
+      <div>
+        <label htmlFor="product" className="font-display text-sm font-semibold">
+          Product <span className="font-normal text-muted">(optional)</span>
+        </label>
+        <select
+          id="product"
+          name="product"
+          defaultValue={values?.product || defaultProduct || ""}
+          aria-invalid={Boolean(errors.product)}
+          aria-describedby={describe("product")}
+          className={`${inputClass} h-[3.125rem]`}
+        >
+          <option value="">Select a product</option>
+          {productOptions.map((group) => (
+            <optgroup key={group.label} label={group.label}>
+              {group.items.map((product) => (
+                <option key={`${group.label}-${product.value}`} value={product.value}>
+                  {product.label}
+                </option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+        {fieldError("product")}
       </div>
 
       <div>

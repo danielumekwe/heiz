@@ -4,6 +4,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { NumberedList } from "@/components/NumberedList";
 import { getCatalogProduct } from "@/data/catalog";
+import { getProduct } from "@/data/products";
 import { enquiryTypes } from "@/lib/enquiry";
 import { brochure, site } from "@/data/site";
 import { pageMetadata } from "@/lib/metadata";
@@ -37,7 +38,9 @@ async function PrefilledForm({
   searchParams: PageProps<"/contact">["searchParams"];
 }) {
   const { type, product } = await searchParams;
-  const named = getCatalogProduct(Array.isArray(product) ? product[0] : product ?? "");
+  const requestedProduct = Array.isArray(product) ? product[0] : product ?? "";
+  const named =
+    getProduct(requestedProduct) ?? getCatalogProduct(requestedProduct);
   const requested = Array.isArray(type) ? type[0] : type;
   const defaultType = enquiryTypes.some((item) => item.value === requested)
     ? requested
@@ -46,6 +49,7 @@ async function PrefilledForm({
   return (
     <EnquiryForm
       defaultType={defaultType}
+      defaultProduct={named?.name}
       defaultMessage={
         named ? `I would like a quote for: ${named.name}\n\n` : undefined
       }

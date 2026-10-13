@@ -178,6 +178,7 @@ export default async function ProductPage({
                   description={item.summary}
                   image={item.image}
                   cta="View details"
+                  quoteHref={`/contact?type=${item.enquiryType}&product=${item.slug}#enquiry`}
                   label={item.category}
                 />
               ))}
@@ -187,6 +188,7 @@ export default async function ProductPage({
                 description="Palletised and bulk volumes for retailers, distributors and businesses buying at scale."
                 image="warehouse"
                 cta="Request Wholesale Pricing"
+                quoteHref="/contact?type=wholesale#enquiry"
                 label="Trade"
               />
             </div>

@@ -15,6 +15,7 @@ const limits: Record<keyof EnquiryValues, number> = {
   email: 200,
   phone: 40,
   enquiryType: 20,
+  product: 180,
   quantity: 120,
   location: 160,
   message: 4000,
