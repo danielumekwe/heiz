@@ -5,6 +5,9 @@ export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = "en";
 
+/** Cookie holding the language the visitor last used (see src/proxy.ts). */
+export const LOCALE_COOKIE = "lang";
+
 export const localeNames: Record<Locale, string> = {
   en: "English",
   de: "Deutsch",

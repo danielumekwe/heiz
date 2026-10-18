@@ -2,7 +2,7 @@
 
 import { useId } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { locales, stripLocale, type Locale } from "@/i18n/config";
+import { LOCALE_COOKIE, locales, stripLocale, type Locale } from "@/i18n/config";
 import { useLocale } from "./LocaleLink";
 
 const flagMap: Record<Locale, string> = {
@@ -38,6 +38,8 @@ export function LanguageSwitcher({
         aria-label={label}
         onChange={(event) => {
           const locale = event.target.value as Locale;
+          // Remember the choice so the site does not switch back to the browser language.
+          document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=31536000; samesite=lax`;
           router.push(
             `/${locale}${rest === "/" ? "" : rest}${search ? `?${search}` : ""}`,
             { scroll: false },
