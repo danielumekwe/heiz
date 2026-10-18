@@ -153,23 +153,8 @@ export default async function PrivacyPolicyPage() {
             <T>3.3 Data analysis by third-party providers</T>
           </h3>
           <p>
-            <T>This website uses Shown, an advertising service of Instaon SRL,
-            Chaussée de Huy 368, 1325 Chaumont-Gistoux, Belgium, to measure the
-            results of our online advertising. Shown can load tracking tags
-            from the advertising networks we run campaigns with: Google Ads
-            (Google Ireland Limited), Meta (Meta Platforms Ireland Limited),
-            Microsoft Advertising (Microsoft Ireland Operations Limited) and X
-            (Twitter International Unlimited Company).</T>
-          </p>
-          <p>
-            <T>These services receive your IP address, details of your browser
-            and device, the pages you visit and, where set up, whether you send
-            an enquiry. They may set cookies or similar identifiers, combine
-            this data with other data they hold about you, and transfer data to
-            the United States. The legal basis is our legitimate interest in
-            measuring and improving our advertising (Art. 6(1)(f) GDPR). You can
-            object at any time, and you can prevent this tracking by blocking
-            third-party cookies or tracking scripts in your browser.</T>
+            <T>We use analytics for advertising purposes, to measure and improve
+            the results of our online advertising.</T>
           </p>
           <p>
             <T>This website does not embed social media plugins, maps or videos
@@ -185,10 +170,9 @@ export default async function PrivacyPolicyPage() {
       body: (
         <p>
           <T>This website sets one cookie of its own, which remembers the
-          language you use on the site. The advertising services described in
-          section 3.3 may set their own cookies to measure the results of our
-          advertising. You can delete or block cookies in your browser
-          settings.</T>
+          language you use on the site. The analytics we use for advertising
+          (section 3.3) may also set cookies. You can delete or block cookies
+          in your browser settings.</T>
         </p>
       ),
     },
