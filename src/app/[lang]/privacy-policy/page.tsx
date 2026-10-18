@@ -16,7 +16,7 @@ export function generateMetadata() {
   });
 }
 
-const LAST_UPDATED = "13 October 2026";
+const LAST_UPDATED = "18 October 2026";
 
 type Section = { id: string; title: string; body: ReactNode };
 
@@ -153,8 +153,26 @@ export default async function PrivacyPolicyPage() {
             <T>3.3 Data analysis by third-party providers</T>
           </h3>
           <p>
-            <T>None. This website does not use analytics, advertising or tracking
-            services, and does not embed social media plugins, maps or videos
+            <T>This website uses Shown, an advertising service of Instaon SRL,
+            Chaussée de Huy 368, 1325 Chaumont-Gistoux, Belgium, to measure the
+            results of our online advertising. Shown can load tracking tags
+            from the advertising networks we run campaigns with: Google Ads
+            (Google Ireland Limited), Meta (Meta Platforms Ireland Limited),
+            Microsoft Advertising (Microsoft Ireland Operations Limited) and X
+            (Twitter International Unlimited Company).</T>
+          </p>
+          <p>
+            <T>These services receive your IP address, details of your browser
+            and device, the pages you visit and, where set up, whether you send
+            an enquiry. They may set cookies or similar identifiers, combine
+            this data with other data they hold about you, and transfer data to
+            the United States. The legal basis is our legitimate interest in
+            measuring and improving our advertising (Art. 6(1)(f) GDPR). You can
+            object at any time, and you can prevent this tracking by blocking
+            third-party cookies or tracking scripts in your browser.</T>
+          </p>
+          <p>
+            <T>This website does not embed social media plugins, maps or videos
             from third parties. The fonts are served from our own website, so
             no font provider receives your IP address.</T>
           </p>
@@ -166,9 +184,11 @@ export default async function PrivacyPolicyPage() {
       title: "Cookies",
       body: (
         <p>
-          <T>This website does not set advertising or analytics cookies. If that
-          changes, we will update this policy and ask for your consent
-          wherever the law requires it.</T>
+          <T>This website sets one cookie of its own, which remembers the
+          language you use on the site. The advertising services described in
+          section 3.3 may set their own cookies to measure the results of our
+          advertising. You can delete or block cookies in your browser
+          settings.</T>
         </p>
       ),
     },

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Inter } from "next/font/google";
+import Script from "next/script";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
@@ -85,6 +86,8 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
             address: { "@type": "PostalAddress", ...site.postalAddress },
           }}
         />
+        {/* Shown: measures our online advertising (see the privacy policy, section 3.3). */}
+        <Script src="https://shown.io/metrics/5M0ZDWmB8P" strategy="afterInteractive" />
       </body>
     </html>
   );
