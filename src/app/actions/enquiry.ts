@@ -8,7 +8,7 @@ import {
 } from "@/lib/enquiry";
 import { defaultLocale, hasLocale } from "@/i18n/config";
 import { translatorFor } from "@/i18n/dictionaries";
-import { isMailConfigured, sendEnquiryEmail } from "@/lib/mailer";
+import { isMailConfigured, sendAcknowledgementEmail, sendEnquiryEmail } from "@/lib/mailer";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -32,9 +32,9 @@ function read(formData: FormData, key: string) {
 /**
  * Handles the enquiry form.
  *
- * Enquiries are emailed to the business mailbox over SMTP (see
- * src/lib/mailer.ts) and, if ENQUIRY_WEBHOOK_URL is set, also forwarded as
- * JSON. Until one of the two is configured the action reports that online
+ * Enquiries are emailed to the business mailbox through ZeptoMail (see
+ * src/lib/mailer.ts), the customer gets a confirmation email, and, if
+ * ENQUIRY_WEBHOOK_URL is set, the enquiry is also forwarded as JSON. Until one of the two is configured the action reports that online
  * enquiries are unavailable; it never reports a success it cannot confirm.
  */
 export async function submitEnquiry(
@@ -123,6 +123,16 @@ export async function submitEnquiry(
         t("Something went wrong and your enquiry was not sent. Please try again in a moment."),
       values,
     };
+  }
+
+  // The enquiry has arrived, so a failed confirmation must not report failure
+  // (the visitor would send it again).
+  if (mailConfigured) {
+    try {
+      await sendAcknowledgementEmail(values, locale);
+    } catch (error) {
+      console.error("Enquiry confirmation email failed", error);
+    }
   }
 
   return {

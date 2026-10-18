@@ -790,5 +790,12 @@
   "{count} products available for enquiry.": "{count} productos disponibles bajo consulta.",
   "{current} of {total}": "{current} de {total}",
   "{minutes} min read": "{minutes} min de lectura",
-  "{name} processes personal data in accordance with the EU General Data Protection Regulation (GDPR). The controller responsible for this website is:": "{name} trata datos personales conforme al Reglamento General de Protección de Datos (RGPD) de la UE. El responsable del tratamiento de este sitio web es:"
+  "{name} processes personal data in accordance with the EU General Data Protection Regulation (GDPR). The controller responsible for this website is:": "{name} trata datos personales conforme al Reglamento General de Protección de Datos (RGPD) de la UE. El responsable del tratamiento de este sitio web es:",
+  "Hello {name},": "Hola, {name}:",
+  "If you would like to add anything, simply reply to this email.": "Si desea añadir algo, simplemente responda a este correo electrónico.",
+  "Kind regards,": "Saludos cordiales,",
+  "Thank you for contacting {company}. We have received your enquiry and will reply to this email address as soon as possible.": "Gracias por ponerse en contacto con {company}. Hemos recibido su consulta y le responderemos a esta dirección de correo electrónico lo antes posible.",
+  "We have received your enquiry – {company}": "Hemos recibido su consulta – {company}",
+  "You are receiving this email because this address was entered in the enquiry form on our website. If this was not you, you can ignore this email.": "Recibe este correo electrónico porque esta dirección se introdujo en el formulario de consulta de nuestro sitio web. Si no fue usted, puede ignorar este correo.",
+  "Your enquiry: {type}": "Su consulta: {type}"
 }
