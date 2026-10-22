@@ -88,6 +88,18 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         />
         {/* Shown: measures our online advertising (see the privacy policy, section 3.3). */}
         <Script src="https://shown.io/metrics/5M0ZDWmB8P" strategy="afterInteractive" />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17974078937"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){window.dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17974078937');
+          `}
+        </Script>
       </body>
     </html>
   );
