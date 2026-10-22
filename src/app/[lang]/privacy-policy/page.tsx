@@ -16,7 +16,7 @@ export function generateMetadata() {
   });
 }
 
-const LAST_UPDATED = "18 October 2026";
+const LAST_UPDATED = "22 October 2026";
 
 type Section = { id: string; title: string; body: ReactNode };
 
@@ -153,8 +153,10 @@ export default async function PrivacyPolicyPage() {
             <T>3.3 Data analysis by third-party providers</T>
           </h3>
           <p>
-            <T>We use analytics for advertising purposes, to measure and improve
-            the results of our online advertising.</T>
+            <T>We use the Google Ads tag and Shown metrics to measure and improve
+            our online advertising. These optional tools are loaded only after
+            you accept analytics and advertising cookies. You can change or
+            withdraw your choice at any time using Cookie settings.</T>
           </p>
           <p>
             <T>This website does not embed social media plugins, maps or videos
@@ -169,10 +171,12 @@ export default async function PrivacyPolicyPage() {
       title: "Cookies",
       body: (
         <p>
-          <T>This website sets one cookie of its own, which remembers the
-          language you use on the site. The analytics we use for advertising
-          (section 3.3) may also set cookies. You can delete or block cookies
-          in your browser settings.</T>
+          <T>This website uses an essential cookie to remember your language
+          and another to remember your cookie choice. The Google Ads tag and
+          Shown metrics described in section 3.3 are loaded only if you accept
+          optional analytics and advertising cookies; those providers may then
+          set their own cookies. You can change your choice at any time using
+          Cookie settings or delete cookies in your browser settings.</T>
         </p>
       ),
     },

@@ -796,7 +796,16 @@
   "You are receiving this email because this address was entered in the enquiry form on our website. If this was not you, you can ignore this email.": "Sie erhalten diese E-Mail, weil diese Adresse im Anfrageformular auf unserer Website angegeben wurde. Falls Sie das nicht waren, können Sie diese E-Mail ignorieren.",
   "Your enquiry: {type}": "Ihre Anfrage: {type}",
   "This website does not embed social media plugins, maps or videos from third parties. The fonts are served from our own website, so no font provider receives your IP address.": "Diese Website bindet keine Social-Media-Plugins, Karten oder Videos von Drittanbietern ein. Die Schriftarten werden von unserer eigenen Website ausgeliefert, sodass kein Schriftartenanbieter Ihre IP-Adresse erhält.",
-  "18 October 2026": "18. Oktober 2026",
-  "We use analytics for advertising purposes, to measure and improve the results of our online advertising.": "Wir nutzen Analysen zu Werbezwecken, um die Ergebnisse unserer Online-Werbung zu messen und zu verbessern.",
-  "This website sets one cookie of its own, which remembers the language you use on the site. The analytics we use for advertising (section 3.3) may also set cookies. You can delete or block cookies in your browser settings.": "Diese Website setzt ein eigenes Cookie, das sich die von Ihnen verwendete Sprache merkt. Die Analysen, die wir zu Werbezwecken nutzen (Abschnitt 3.3), können ebenfalls Cookies setzen. Sie können Cookies in Ihren Browsereinstellungen löschen oder blockieren."
+  "22 October 2026": "22. Oktober 2026",
+  "We use the Google Ads tag and Shown metrics to measure and improve our online advertising. These optional tools are loaded only after you accept analytics and advertising cookies. You can change or withdraw your choice at any time using Cookie settings.": "Wir verwenden das Google-Ads-Tag und Shown-Metriken, um die Ergebnisse unserer Online-Werbung zu messen und zu verbessern. Diese optionalen Tools werden erst geladen, wenn Sie Analyse- und Werbe-Cookies akzeptieren. Sie können Ihre Auswahl jederzeit über die Cookie-Einstellungen ändern oder widerrufen.",
+  "This website uses an essential cookie to remember your language and another to remember your cookie choice. The Google Ads tag and Shown metrics described in section 3.3 are loaded only if you accept optional analytics and advertising cookies; those providers may then set their own cookies. You can change your choice at any time using Cookie settings or delete cookies in your browser settings.": "Diese Website verwendet ein erforderliches Cookie, um Ihre Spracheinstellung zu speichern, und ein weiteres, um Ihre Cookie-Auswahl zu speichern. Das Google-Ads-Tag und die in Abschnitt 3.3 beschriebenen Shown-Metriken werden nur geladen, wenn Sie optionale Analyse- und Werbe-Cookies akzeptieren. Diese Anbieter können dann eigene Cookies setzen. Sie können Ihre Auswahl jederzeit über die Cookie-Einstellungen ändern oder Cookies in Ihren Browsereinstellungen löschen.",
+  "Cookie preferences": "Cookie-Einstellungen",
+  "We use optional analytics and advertising tools from Google Ads and Shown to measure advertising performance. They stay off unless you accept.": "Wir verwenden optionale Analyse- und Werbetools von Google Ads und Shown, um die Leistung unserer Werbung zu messen. Sie bleiben deaktiviert, bis Sie zustimmen.",
+  "Essential cookies": "Erforderliche Cookies",
+  "Always on. They remember your language and cookie choice.": "Immer aktiv. Sie speichern Ihre Spracheinstellung und Cookie-Auswahl.",
+  "Optional analytics and advertising": "Optionale Analyse und Werbung",
+  "Off until you accept.": "Deaktiviert, bis Sie zustimmen.",
+  "Accept optional cookies": "Optionale Cookies akzeptieren",
+  "Reject optional cookies": "Optionale Cookies ablehnen",
+  "Cookie settings": "Cookie-Einstellungen"
 }

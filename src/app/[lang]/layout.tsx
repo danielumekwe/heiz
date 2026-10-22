@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Inter } from "next/font/google";
-import Script from "next/script";
+import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
@@ -86,20 +86,25 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
             address: { "@type": "PostalAddress", ...site.postalAddress },
           }}
         />
-        {/* Shown: measures our online advertising (see the privacy policy, section 3.3). */}
-        <Script src="https://shown.io/metrics/5M0ZDWmB8P" strategy="afterInteractive" />
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-17974078937"
-          strategy="afterInteractive"
+        <CookieConsent
+          privacyPolicyHref={localizePath(locale, "/privacy-policy")}
+          text={{
+            title: t("Cookie preferences"),
+            description: t(
+              "We use optional analytics and advertising tools from Google Ads and Shown to measure advertising performance. They stay off unless you accept.",
+            ),
+            essentialTitle: t("Essential cookies"),
+            essentialDescription: t(
+              "Always on. They remember your language and cookie choice.",
+            ),
+            optionalTitle: t("Optional analytics and advertising"),
+            optionalDescription: t("Off until you accept."),
+            accept: t("Accept optional cookies"),
+            reject: t("Reject optional cookies"),
+            settings: t("Cookie settings"),
+            privacyPolicy: t("Privacy Policy"),
+          }}
         />
-        <Script id="google-tag-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){window.dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-17974078937');
-          `}
-        </Script>
       </body>
     </html>
   );
