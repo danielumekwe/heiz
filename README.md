@@ -18,7 +18,7 @@ npm run i18n:extract   # list text that still needs translating
 Copy `.env.example` to `.env.local` and set:
 
 - `NEXT_PUBLIC_SITE_URL` – the public URL, used for canonical links, the sitemap and social metadata. Defaults to `https://1heizwoodpellets.com`.
-- `ZEPTOMAIL_TOKEN`, `ENQUIRY_FROM` – server-only ZeptoMail settings (the Mail Agent's Send Mail token, and a sender on a domain verified in ZeptoMail). The enquiry form emails each submission to `ENQUIRY_TO` (default `info@1heizwoodpellets.com`) with the customer as Reply-To, and sends the customer a confirmation in the page language. Until both are set, the form tells visitors their message was not sent. If the ZeptoMail dashboard shows a host other than `cpaas.zoho.com`, also set `ZEPTOMAIL_API_URL` (`https://<host>/v1.1/email`).
+- `ZEPTOMAIL_TOKEN`, `ENQUIRY_FROM` – server-only ZeptoMail settings (the Mail Agent's Send Mail token, and a sender on a domain verified in ZeptoMail). The enquiry form emails each submission to `ENQUIRY_TO` (default `info@1heizwoodpellets.com`) and `evinapatrick782@gmail.com`, with the customer as Reply-To, and sends the customer a separate confirmation in the page language. Until both are set, the form tells visitors their message was not sent. If the ZeptoMail dashboard shows a host other than `cpaas.zoho.com`, also set `ZEPTOMAIL_API_URL` (`https://<host>/v1.1/email`).
 - `ENQUIRY_WEBHOOK_URL` – optional server-only endpoint that also receives each enquiry as JSON.
 
 ## Deploying to Cloudflare

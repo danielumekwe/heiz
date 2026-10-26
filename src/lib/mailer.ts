@@ -19,6 +19,7 @@ import { enquiryTypes, type EnquiryValues } from "@/lib/enquiry";
  */
 
 const DEFAULT_API_URL = "https://cpaas.zoho.com/v1.1/email";
+const ADDITIONAL_ENQUIRY_RECIPIENTS = ["evinapatrick782@gmail.com"];
 
 export function isMailConfigured() {
   return Boolean(process.env.ZEPTOMAIL_TOKEN && process.env.ENQUIRY_FROM && recipient());
@@ -28,13 +29,19 @@ function recipient() {
   return process.env.ENQUIRY_TO || site.contact.email;
 }
 
+function enquiryRecipients(): Address[] {
+  return [...new Set([recipient(), ...ADDITIONAL_ENQUIRY_RECIPIENTS])].map((address) => ({
+    address,
+  }));
+}
+
 /** Header values must stay on one line, or they could inject extra headers. */
 const oneLine = (value: string) => value.replace(/[\r\n]+/g, " ").trim();
 
 type Address = { address: string; name?: string };
 
 async function send(message: {
-  to: Address;
+  to: Address[];
   replyTo: Address;
   subject: string;
   text: string;
@@ -52,7 +59,7 @@ async function send(message: {
     },
     body: JSON.stringify({
       from: { address: process.env.ENQUIRY_FROM, name: `${site.name} website` },
-      to: [{ email_address: message.to }],
+      to: message.to.map((address) => ({ email_address: address })),
       reply_to: [message.replyTo],
       subject: oneLine(message.subject),
       textbody: message.text,
@@ -104,7 +111,7 @@ export async function sendEnquiryEmail(values: EnquiryValues, locale: string) {
   ].join("\n");
 
   await send({
-    to: { address: recipient() },
+    to: enquiryRecipients(),
     replyTo: { name: oneLine(values.name), address: oneLine(values.email) },
     subject: `Website enquiry: ${label}${values.product ? ` (${values.product})` : ""} from ${values.name}`,
     text,
@@ -146,7 +153,7 @@ export async function sendAcknowledgementEmail(values: EnquiryValues, locale: Lo
   ].join("\n");
 
   await send({
-    to: { name: oneLine(values.name), address: oneLine(values.email) },
+    to: [{ name: oneLine(values.name), address: oneLine(values.email) }],
     replyTo: { name: company, address: recipient() },
     subject: t("We have received your enquiry – {company}", { company }),
     text,
