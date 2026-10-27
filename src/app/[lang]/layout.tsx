@@ -4,7 +4,9 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
+import { QuoteEnquiryPopup } from "@/components/QuoteEnquiryPopup";
 import { absoluteUrl, site } from "@/data/site";
+import { enquiryFormContent } from "@/i18n/content";
 import { locales, localizePath, ogLocales } from "@/i18n/config";
 import { getLocale, getT } from "@/i18n/server";
 import { languageAlternates } from "@/lib/metadata";
@@ -104,6 +106,13 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
             settings: t("Cookie settings"),
             privacyPolicy: t("Privacy Policy"),
           }}
+        />
+        <QuoteEnquiryPopup
+          content={enquiryFormContent(t)}
+          contactEmail={email}
+          title={t("Get a free quote")}
+          description={t("Tell us what you need and we’ll get back to you with a quote.")}
+          closeLabel={t("Close quote request")}
         />
       </body>
     </html>

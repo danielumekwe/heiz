@@ -29,6 +29,30 @@ function read(formData: FormData, key: string) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+async function verifyRecaptcha(token: string) {
+  const secret = process.env.RECAPTCHA_SECRET_KEY;
+  if (!secret) {
+    console.error("reCAPTCHA verification is unavailable: RECAPTCHA_SECRET_KEY is not configured");
+    return false;
+  }
+  if (!token) return false;
+
+  const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ secret, response: token }),
+    signal: AbortSignal.timeout(10_000),
+    cache: "no-store",
+  });
+  if (!response.ok) throw new Error(`reCAPTCHA verification returned ${response.status}`);
+
+  const result: { success: boolean; ["error-codes"]?: string[] } = await response.json();
+  if (!result.success) {
+    console.warn("reCAPTCHA rejected an enquiry", result["error-codes"] ?? []);
+  }
+  return result.success;
+}
+
 /**
  * Handles the enquiry form.
  *
@@ -83,6 +107,25 @@ export async function submitEnquiry(
       status: "invalid",
       message: t("Check the highlighted fields and try again."),
       errors,
+      values,
+    };
+  }
+
+  try {
+    if (!(await verifyRecaptcha(read(formData, "recaptchaToken")))) {
+      return {
+        status: "failed",
+        message:
+          t("Something went wrong and your enquiry was not sent. Please try again in a moment."),
+        values,
+      };
+    }
+  } catch (error) {
+    console.error("reCAPTCHA verification failed", error);
+    return {
+      status: "failed",
+      message:
+        t("Something went wrong and your enquiry was not sent. Please try again in a moment."),
       values,
     };
   }

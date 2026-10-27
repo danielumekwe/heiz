@@ -83,6 +83,7 @@ export function enquiryFormContent(t: Translate) {
       ),
       sending: t("Sending…"),
       send: t("Send Enquiry"),
+      captchaError: t("Captcha verification is unavailable. Please reload the page and try again."),
     },
     types: enquiryTypes.map((type) => ({ value: type.value, label: t(type.label) })),
     productGroups: [

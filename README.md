@@ -20,6 +20,7 @@ Copy `.env.example` to `.env.local` and set:
 - `NEXT_PUBLIC_SITE_URL` – the public URL, used for canonical links, the sitemap and social metadata. Defaults to `https://1heizwoodpellets.com`.
 - `ZEPTOMAIL_TOKEN`, `ENQUIRY_FROM` – server-only ZeptoMail settings (the Mail Agent's Send Mail token, and a sender on a domain verified in ZeptoMail). The enquiry form emails each submission to `ENQUIRY_TO` (default `info@1heizwoodpellets.com`) and `evinapatrick782@gmail.com`, with the customer as Reply-To, and sends the customer a separate confirmation in the page language. Until both are set, the form tells visitors their message was not sent. If the ZeptoMail dashboard shows a host other than `cpaas.zoho.com`, also set `ZEPTOMAIL_API_URL` (`https://<host>/v1.1/email`).
 - `ENQUIRY_WEBHOOK_URL` – optional server-only endpoint that also receives each enquiry as JSON.
+- `RECAPTCHA_SECRET_KEY` – server-only Google reCAPTCHA v2 invisible secret used to verify enquiry submissions. The public site key is configured in `src/components/EnquiryForm.tsx`.
 
 ## Deploying to Cloudflare
 
@@ -35,7 +36,7 @@ To deploy from GitHub instead, create a Worker in the Cloudflare dashboard, conn
 - Build command: `npx opennextjs-cloudflare build`
 - Deploy command: `npx wrangler deploy`
 
-Then add the mail settings under the Worker's Settings → Variables and Secrets: `ENQUIRY_FROM` and `ENQUIRY_TO` (and `ZEPTOMAIL_API_URL` if needed) as variables and `ZEPTOMAIL_TOKEN` as a secret. For the local preview, put the same names in `.dev.vars`.
+Then add the mail settings under the Worker's Settings → Variables and Secrets: `ENQUIRY_FROM` and `ENQUIRY_TO` (and `ZEPTOMAIL_API_URL` if needed) as variables, and `ZEPTOMAIL_TOKEN` and `RECAPTCHA_SECRET_KEY` as secrets. For the local preview, put the same names in `.dev.vars`.
 
 Notes:
 
