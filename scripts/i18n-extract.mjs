@@ -11,7 +11,7 @@ import { execSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-const LANGS = ["de", "fr", "es"];
+const LANGS = ["de", "fr", "es", "nl"];
 mkdirSync(".i18n", { recursive: true });
 if (existsSync(".i18n/strings.ndjson")) rmSync(".i18n/strings.ndjson");
 

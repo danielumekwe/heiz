@@ -3,9 +3,10 @@ import type { Locale } from "./config";
 import de from "./dictionaries/de.json";
 import es from "./dictionaries/es.json";
 import fr from "./dictionaries/fr.json";
+import nl from "./dictionaries/nl.json";
 import { createTranslate, type Dictionary, type Translate } from "./translate";
 
-const dictionaries: Record<Locale, Dictionary> = { en: {}, de, fr, es };
+const dictionaries: Record<Locale, Dictionary> = { en: {}, de, fr, es, nl };
 
 /**
  * With I18N_EXTRACT=1, every source string that passes through t() is appended

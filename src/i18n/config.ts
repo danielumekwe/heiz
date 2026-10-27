@@ -1,5 +1,5 @@
 /** Languages the site is published in. English is the source language. */
-export const locales = ["en", "de", "fr", "es"] as const;
+export const locales = ["en", "de", "fr", "es", "nl"] as const;
 
 export type Locale = (typeof locales)[number];
 
@@ -13,6 +13,7 @@ export const localeNames: Record<Locale, string> = {
   de: "Deutsch",
   fr: "Français",
   es: "Español",
+  nl: "Nederlands",
 };
 
 /** Open Graph locale codes. */
@@ -21,6 +22,7 @@ export const ogLocales: Record<Locale, string> = {
   de: "de_DE",
   fr: "fr_FR",
   es: "es_ES",
+  nl: "nl_NL",
 };
 
 export function hasLocale(value: string | undefined | null): value is Locale {

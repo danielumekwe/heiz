@@ -10,7 +10,7 @@ const batches = JSON.parse(readFileSync(".i18n/tr/batches.json", "utf8"));
 const placeholders = (text) => (text.match(/\{\w+\}|<\/?\w+\/?>/g) ?? []).sort().join(" ");
 let problems = 0;
 
-for (const lang of ["de", "fr", "es"]) {
+for (const lang of ["de", "fr", "es", "nl"]) {
   const path = `src/i18n/dictionaries/${lang}.json`;
   const dictionary = JSON.parse(readFileSync(path, "utf8"));
   let merged = 0;

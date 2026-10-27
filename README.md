@@ -46,10 +46,10 @@ Notes:
 
 ## Languages
 
-The site is published in English, German, French and Spanish at `/en`, `/de`, `/fr` and `/es`. Addresses without a language prefix redirect to the visitor's browser language (English if none matches); see `src/proxy.ts`.
+The site is published in English, German, French, Spanish and Dutch at `/en`, `/de`, `/fr`, `/es` and `/nl`. Dutch pages use the Dutch dictionary and fall back to English for any untranslated strings. Addresses without a language prefix redirect to the visitor's browser language (English if none matches); see `src/proxy.ts`.
 
 - English is the source language and lives in the pages, components and `src/data/`.
-- Translations are in `src/i18n/dictionaries/{de,fr,es}.json`, keyed by the English text. A string with no entry falls back to English.
+- Translations are in `src/i18n/dictionaries/{de,fr,es,nl}.json`, keyed by the English text. A string with no entry falls back to English.
 - In Server Components, wrap text in `<T>…</T>` or call `const t = await getT()`. Interactive (client) components receive their text already translated through props.
 - Use `Link` from `@/components/LocaleLink` for internal links so visitors stay in their language.
 - After changing or adding English text, run `npm run i18n:extract`. It builds the site and writes the strings each language still lacks to `.i18n/missing.<lang>.json`; add those to the dictionaries.

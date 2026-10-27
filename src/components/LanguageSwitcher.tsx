@@ -2,7 +2,13 @@
 
 import { useId } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { LOCALE_COOKIE, locales, stripLocale, type Locale } from "@/i18n/config";
+import {
+  LOCALE_COOKIE,
+  localeNames,
+  locales,
+  stripLocale,
+  type Locale,
+} from "@/i18n/config";
 import { useLocale } from "./LocaleLink";
 
 const flagMap: Record<Locale, string> = {
@@ -10,6 +16,7 @@ const flagMap: Record<Locale, string> = {
   de: "🇩🇪",
   fr: "🇫🇷",
   es: "🇪🇸",
+  nl: "🇳🇱",
 };
 
 export function LanguageSwitcher({
@@ -48,7 +55,7 @@ export function LanguageSwitcher({
         className="appearance-none rounded-full border border-sand bg-paper px-2 py-2 pr-8 text-xl shadow-sm transition-colors hover:border-forest-700 focus:border-forest-800 focus:outline-none"
       >
         {locales.map((locale) => (
-          <option key={locale} value={locale} aria-label={locale}>
+          <option key={locale} value={locale} aria-label={localeNames[locale]}>
             {flagMap[locale]}
           </option>
         ))}
