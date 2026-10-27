@@ -5,8 +5,6 @@ import { usePathname } from "next/navigation";
 import type { EnquiryFormContent } from "@/i18n/content";
 import { EnquiryForm } from "./EnquiryForm";
 
-const CONSENT_COOKIE = "heiz_cookie_consent_v1";
-
 export function QuoteEnquiryPopup({
   content,
   contactEmail,
@@ -26,34 +24,13 @@ export function QuoteEnquiryPopup({
   const pathname = usePathname();
 
   useEffect(() => {
-    let waitingForConsent = false;
-
-    const hasConsentChoice = () =>
-      document.cookie
-        .split("; ")
-        .some((cookie) => cookie.startsWith(`${CONSENT_COOKIE}=`));
-
-    const openAfterConsent = () => {
-      if (!waitingForConsent || !hasConsentChoice()) return;
-      waitingForConsent = false;
-      setIsOpen(true);
-    };
-
     if (dialogRef.current?.open) dialogRef.current.close();
 
     const timer = window.setTimeout(() => {
-      if (hasConsentChoice()) {
-        setIsOpen(true);
-      } else {
-        waitingForConsent = true;
-      }
-    }, 60_000);
+      setIsOpen(true);
+    }, 30_000);
 
-    window.addEventListener("cookie-consent-change", openAfterConsent);
-    return () => {
-      window.clearTimeout(timer);
-      window.removeEventListener("cookie-consent-change", openAfterConsent);
-    };
+    return () => window.clearTimeout(timer);
   }, [pathname]);
 
   useEffect(() => {
