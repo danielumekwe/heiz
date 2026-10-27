@@ -72,13 +72,20 @@ function loadOptionalTracking() {
     shownScript.src = "https://shown.io/metrics/5M0ZDWmB8P";
     document.head.appendChild(shownScript);
   }
+
+  if (!document.getElementById("microsoft-uet-tag")) {
+    const microsoftScript = document.createElement("script");
+    microsoftScript.id = "microsoft-uet-tag";
+    microsoftScript.textContent = `(function(w,d,t,u,o){w[u]=w[u]||[],o.ts=(new Date).getTime();var n=d.createElement(t);n.src="https://bat.bing.net/bat.js?ti="+o.ti+("uetq"!=u?"&q="+u:""),n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&"loaded"!==s&&"complete"!==s||(o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad"),n.onload=n.onreadystatechange=null)};var i=d.getElementsByTagName(t)[0];i.parentNode.insertBefore(n,i)})(window,document,"script","uetq",{ti:"187283699",enableAutoSpaTracking:true});`;
+    document.head.appendChild(microsoftScript);
+  }
 }
 
 function clearTrackingCookies() {
   const trackingCookies = document.cookie
     .split(";")
     .map((cookie) => cookie.trim().split("=")[0])
-    .filter((name) => /^(_ga|_gid|_gat|_gcl_)/.test(name));
+    .filter((name) => /^(_ga|_gid|_gat|_gcl_|_uet)/.test(name));
   const hostname = window.location.hostname;
   const domains = [hostname, `.${hostname.replace(/^www\./, "")}`];
 

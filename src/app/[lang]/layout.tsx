@@ -91,7 +91,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
           text={{
             title: t("Cookie preferences"),
             description: t(
-              "We use optional analytics and advertising tools from Google Ads and Shown to measure advertising performance. They stay off unless you accept.",
+              "We use optional analytics and advertising tools from Google Ads, Microsoft Advertising and Shown to measure advertising performance. They stay off unless you accept.",
             ),
             essentialTitle: t("Essential cookies"),
             essentialDescription: t(
