@@ -6,6 +6,7 @@ import { submitEnquiry } from "@/app/actions/enquiry";
 import type { EnquiryFormContent } from "@/i18n/content";
 import { rich } from "@/i18n/translate";
 import { initialEnquiryState, type EnquiryField } from "@/lib/enquiry";
+import { reportQuoteConversion } from "@/lib/google-ads-conversion";
 import { buttonClass } from "./ButtonLink";
 import Link, { useLocale } from "./LocaleLink";
 
@@ -17,6 +18,7 @@ const recaptchaSiteKey = "6LeYgQEuAAAAAB-IMLu-bqhGVAXkGYvnkj4r2YVZ";
 
 declare global {
   interface Window {
+    gtag?: (...args: [command: string, ...parameters: unknown[]]) => void;
     grecaptcha?: {
       ready(callback: () => void): void;
       render(
@@ -61,6 +63,7 @@ export function EnquiryForm({
   const captchaRef = useRef<HTMLDivElement>(null);
   const captchaWidgetRef = useRef<number | null>(null);
   const captchaBypassRef = useRef(false);
+  const conversionReportedRef = useRef(false);
   const [captchaError, setCaptchaError] = useState(false);
 
   const initializeCaptcha = () => {
@@ -97,6 +100,15 @@ export function EnquiryForm({
       window.grecaptcha?.reset(captchaWidgetRef.current);
     }
   }, [state]);
+
+  useEffect(() => {
+    reportQuoteConversion(
+      state.status,
+      process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL?.trim(),
+      window.gtag,
+      conversionReportedRef,
+    );
+  }, [state.status]);
 
   // Move focus to the outcome so keyboard and screen-reader users hear it.
   useEffect(() => {
